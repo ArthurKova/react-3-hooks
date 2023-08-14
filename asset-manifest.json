@@ -1,0 +1,17 @@
+{
+  "files": {
+    "main.css": "/react-3-hooks/static/css/main.e738e653.css",
+    "main.js": "/react-3-hooks/static/js/main.ae543e0a.js",
+    "static/js/787.b842ecb7.chunk.js": "/react-3-hooks/static/js/787.b842ecb7.chunk.js",
+    "static/media/logo.svg": "/react-3-hooks/static/media/logo.6ce24c58023cc2f8fd88fe9d219db6c6.svg",
+    "static/media/loop.svg": "/react-3-hooks/static/media/loop.88e26f2e4d077ee285e3.svg",
+    "index.html": "/react-3-hooks/index.html",
+    "main.e738e653.css.map": "/react-3-hooks/static/css/main.e738e653.css.map",
+    "main.ae543e0a.js.map": "/react-3-hooks/static/js/main.ae543e0a.js.map",
+    "787.b842ecb7.chunk.js.map": "/react-3-hooks/static/js/787.b842ecb7.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.e738e653.css",
+    "static/js/main.ae543e0a.js"
+  ]
+}
