@@ -8,6 +8,8 @@ import { toast } from 'react-toastify';
 import galleryFetch from 'Components/api/fetch';
 import propTypes from 'prop-types';
 
+const initialState = {page:1,gallery:[]} //etc
+
 const ImageGallery = ({ request }) => {
   const [gallery, setGallery] = useState([]);
   const [modalData, setModalData] = useState({});
@@ -35,12 +37,12 @@ const ImageGallery = ({ request }) => {
   }, [request]);
 
   useEffect(() => {
-    if (page !== 1) {
+    if (page === 1) { return}
       galleryFetch(request, page).then(response => {
         const newGallery = response.hits;
         setGallery(prevState => [...prevState, ...newGallery]);
       });
-    }
+    
   }, [page]);
 
   useEffect(() => {
@@ -71,14 +73,14 @@ const ImageGallery = ({ request }) => {
     openModal();
   };
 
-  const openModal = () => {
-    setModalState(true);
-  };
+  // const openModal = () => {
+  //   setModalState(true);
+  // };
 
-  const closeModal = () => {
-    setModalState(false);
-  };
-
+  // const closeModal = () => {
+  //   setModalState(false);
+  // };
+const modalToggle = () =>setModalState(!modalState)
   // markup
 
   if (error !== '') {
