@@ -8,19 +8,19 @@ import { toast } from 'react-toastify';
 import galleryFetch from 'Components/api/fetch';
 import propTypes from 'prop-types';
 
+const initialState = { modal: {}, status: 'empty', error: '' };
+
 const ImageGallery = ({ request }) => {
   const [gallery, setGallery] = useState([]);
-  const [modalData, setModalData] = useState({});
-  const [modalState, setModalState] = useState(false);
-  const [status, setStatus] = useState('empty');
+  const [modal, setModal] = useState({ status: false });
   const [page, setPage] = useState(1);
-  const [error, setError] = useState('');
 
   useEffect(() => {
     if (request === '') {
       return;
     }
-    setStatus('loading');
+
+    initialState.status = 'loading';
     setPage(1);
     setGallery([]);
     setTimeout(() => {
@@ -29,27 +29,31 @@ const ImageGallery = ({ request }) => {
           const gallery = response.hits;
           setGallery([...gallery]);
         })
-        .catch(error => setError(error))
-        .finally(setStatus('recieve'));
+        .catch(error => (initialState.erroe = error))
+        .finally((initialState.status = 'recieve'));
     }, 1000);
   }, [request]);
 
   useEffect(() => {
-    if (page !== 1) {
-      galleryFetch(request, page).then(response => {
-        const newGallery = response.hits;
-        setGallery(prevState => [...prevState, ...newGallery]);
-      });
+    if (page === 1) {
+      return;
     }
+
+    galleryFetch(request, page).then(response => {
+      const newGallery = response.hits;
+      setGallery(prevState => [...prevState, ...newGallery]);
+    });
   }, [page]);
 
   useEffect(() => {
-    window.addEventListener('click', galleryPageKeyboardClose);
+    if (modal) {
+      window.addEventListener('click', galleryPageKeyboardClose);
+    }
 
     return () => {
       window.removeEventListener('click', galleryPageKeyboardClose);
     };
-  }, [modalState]);
+  }, [modal]);
 
   // load more page logic
   const onLoadMoreClick = num => {
@@ -59,7 +63,7 @@ const ImageGallery = ({ request }) => {
   //  modal logic
   const galleryPageKeyboardClose = e => {
     if (e.target.tagName !== 'IMG') {
-      closeModal();
+      toggleModal();
     }
   };
 
@@ -67,42 +71,36 @@ const ImageGallery = ({ request }) => {
     const alt = e.target.alt;
     const link = e.target.dataset.img;
 
-    setModalData({ link, alt });
-    openModal();
+    initialState.modal = { alt, link };
+    toggleModal();
   };
 
-  const openModal = () => {
-    setModalState(true);
-  };
-
-  const closeModal = () => {
-    setModalState(false);
-  };
+  const toggleModal = () => setModal(!modal);
 
   // markup
 
-  if (error !== '') {
-    toast.warn(error);
-    setError({ error: '' });
+  if (initialState.error !== '') {
+    toast.warn(initialState.error);
+    initialState.error = '';
   }
 
-  if (status === 'recieve') {
+  if (initialState.status === 'recieve') {
     return (
       <>
         <ul className="ImageGallery" onClick={onImageModalOpen}>
           {<ImageGalleryItem data={gallery} />}
         </ul>
         <Button onLoadMoreClick={onLoadMoreClick} />
-        {modalState && (
-          <Modal closeModal={closeModal}>
-            <img src={modalData.link} alt={modalData.alt} />
+        {modal && (
+          <Modal closeModal={toggleModal}>
+            <img src={initialState.modal.link} alt={initialState.modal.alt} />
           </Modal>
         )}
       </>
     );
   }
 
-  if (status === 'loading') {
+  if (initialState.status === 'loading') {
     return (
       <div className="ImageGallery__loader">
         <Loader />
