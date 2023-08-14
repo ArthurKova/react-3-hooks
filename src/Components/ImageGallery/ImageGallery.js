@@ -22,14 +22,12 @@ const ImageGallery = ({ request }) => {
 
     initialState.status = 'loading';
     setPage(1);
-    setGallery([]);
     setTimeout(() => {
       galleryFetch(request, page)
         .then(response => {
-          const gallery = response.hits;
-          setGallery([...gallery]);
+          setGallery(response.hits);
         })
-        .catch(error => (initialState.erroe = error))
+        .catch(error => (initialState.error = error))
         .finally((initialState.status = 'recieve'));
     }, 1000);
   }, [request]);
@@ -40,8 +38,7 @@ const ImageGallery = ({ request }) => {
     }
 
     galleryFetch(request, page).then(response => {
-      const newGallery = response.hits;
-      setGallery(prevState => [...prevState, ...newGallery]);
+      setGallery(prevState => [...prevState, ...response.hits]);
     });
   }, [page]);
 
@@ -67,11 +64,12 @@ const ImageGallery = ({ request }) => {
     }
   };
 
-  const onImageModalOpen = e => {
-    const alt = e.target.alt;
-    const link = e.target.dataset.img;
-
-    initialState.modal = { alt, link };
+  const onImageModalOpen = ({ target }) => {
+    const {
+      alt,
+      dataset: { img },
+    } = target;
+    initialState.modal = { alt, img };
     toggleModal();
   };
 
@@ -93,7 +91,7 @@ const ImageGallery = ({ request }) => {
         <Button onLoadMoreClick={onLoadMoreClick} />
         {modal && (
           <Modal closeModal={toggleModal}>
-            <img src={initialState.modal.link} alt={initialState.modal.alt} />
+            <img src={initialState.modal.img} alt={initialState.modal.alt} />
           </Modal>
         )}
       </>

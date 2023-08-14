@@ -3,22 +3,22 @@ import propTypes from 'prop-types';
 import './ImageGalleryItem.css';
 
 const ImageGalleryItem = ({ data }) => {
-  if (data) {
-    return data.map(el => {
-      const { id, largeImageURL, webformatURL, tags } = el;
+  // if (data) {
+  return data?.map(el => {
+    const { id, largeImageURL, webformatURL, tags } = el;
 
-      return (
-        <li className="ImageGalleryItem" key={tags + id}>
-          <img
-            src={webformatURL}
-            alt={tags}
-            className="ImageGalleryItem-image"
-            data-img={largeImageURL}
-          />
-        </li>
-      );
-    });
-  }
+    return (
+      <li className="ImageGalleryItem" key={tags + id}>
+        <img
+          src={webformatURL}
+          alt={tags}
+          className="ImageGalleryItem-image"
+          data-img={largeImageURL}
+        />
+      </li>
+    );
+  });
+  // }
 };
 
 ImageGalleryItem.propTypes = {

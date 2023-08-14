@@ -4,9 +4,7 @@ import propTypes from 'prop-types';
 import './Button.css';
 
 const Button = ({ onLoadMoreClick }) => {
-  const onClick = () => {
-    return onLoadMoreClick(1);
-  };
+  const onClick = () => onLoadMoreClick(1);
 
   return (
     <div className="Button__box">
